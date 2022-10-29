@@ -10,19 +10,18 @@ public class LetterFrequency {
         String fileLocation = createFile("https://www.folgerdigitaltexts.org/Oth/text");
         String example = getText(fileLocation);
         Map<String, Double> result = getLetterOccurrence(example);
-        for (Map.Entry<String, Double> element : result.entrySet()) {
-            System.out.printf(Locale.ROOT, element.getKey() + " occurrence is %.2f%%\n", element.getValue());
-        }
+        result.forEach((key, value) -> System.out.printf(Locale.ROOT, key + " occurrence is %.2f%%\n", value));
+
     }
 
     private static Map<String, Double> getLetterOccurrence(String inputText) {
-        String modified = inputText.toUpperCase().replaceAll("[^A-Z]", "");
-        return Arrays.stream(modified.split(""))
+        String processedString = inputText.toUpperCase().replaceAll("[^A-Z]", "");
+        return Arrays.stream(processedString.split(""))
                 .collect(Collectors.groupingBy(Object::toString, Collectors.counting()))
                 .entrySet()
                 .stream()
                 .collect(Collectors.toMap(Map.Entry::getKey,
-                        e -> e.getValue().doubleValue() * 100 / modified.length(),
+                        e -> e.getValue().doubleValue() * 100 / processedString.length(),
                         (e1, e2) -> e1, TreeMap::new));
     }
 
